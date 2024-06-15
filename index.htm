@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+  </head>
+  <body>
+    
+    <header>
+        <h1>Deabolt Password Generator</h1>
+    </header>
+
+    <main>
+
+        <section id="blurb">
+            <h2>Turn <strong>memorable phrases</strong> into <strong>strong passwords</strong></h2>
+            <p>If you struggle to come up with unique, strong passwords or use the same password for everything then Deadbolt Password Generator is the solution you've been waiting for.</p>
+        </section>
+
+        <form>
+            <section id="password-entry">
+                <label for="memorable-phrase">Memorable Phrase</label>
+                <input type="text" id="memorable-phrase" />
+                <button id="toggle-password-view"></button>
+                <small>Enter at least 6 characters</small>
+            </section>
+            <section id="password-options">
+                <h3>Password Options</h3>
+                <div class="pin">
+                    <input type="number" id="pinOne" min="0" max="9" />
+                    <input type="number" id="pinTwo" min="0" max="9" />
+                    <input type="number" id="pinThree" min="0" max="9" />
+                    <input type="number" id="pinFour" min="0" max="9" />
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="include-symbols">
+                    <label for="include-symbols">Include Symbols (e.g. &#$)</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="case-sensitive">
+                    <label for="case-sensitive">Case Sensitive<label>
+                </div>
+                <div class="option">
+                    <select id="number-of-characters">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                    </select>
+                    <label for="number-of-characters">Characters<label>
+                </div>
+            </section>
+        </form>
+
+        <section id="faqs">
+
+        </section>
+
+    </main>
+
+    <footer>
+
+    </footer>
+
+  </body>
+</html>
