@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Deabolt Password Generator</title>
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+    <script src="https://kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   </head>
   <body>
     
@@ -24,9 +28,11 @@
         <form>
             <section id="password-entry">
                 <label for="memorable-phrase">Memorable Phrase</label>
-                <input type="text" id="memorable-phrase" />
-                <button id="toggle-password-view"></button>
-                <small>Enter at least 6 characters</small>
+                <div class="phrase-entry">
+                    <input type="text" id="memorable-phrase" />
+                    <button id="toggle-password-view"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                <small>Enter at least <span id="remaining-character-count">6 more</span> characters</small>
             </section>
             <section id="password-options">
                 <h3>Password Options</h3>
