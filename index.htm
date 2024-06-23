@@ -7,12 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Deabolt Password Generator</title>
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
-    <script src="https://kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <link rel="preconnect" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+    <link href="//fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body x-data="deadbolt()" :class="optionsToggled ? 'options-toggled' : ''">
     
     <header>
         <h1>Deabolt Password Generator</h1>
@@ -29,46 +30,58 @@
             <section id="password-entry">
                 <label for="memorable-phrase">Memorable Phrase</label>
                 <div class="phrase-entry">
-                    <input type="text" id="memorable-phrase" />
-                    <button id="toggle-password-view"><i class="fa-solid fa-eye"></i></button>
+                    <input :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" />
+                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
                 </div>
                 <small>Enter at least <span id="remaining-character-count">6 more</span> characters</small>
             </section>
             <section id="password-options">
-                <h3>Password Options</h3>
-                <div class="pin">
-                    <input type="number" id="pinOne" min="0" max="9" />
-                    <input type="number" id="pinTwo" min="0" max="9" />
-                    <input type="number" id="pinThree" min="0" max="9" />
-                    <input type="number" id="pinFour" min="0" max="9" />
+                <div id="options-toggle-container">
+                    <button id="options-toggle" x-on:click.prevent="toggleOptions()"><i class="fa-solid fa-gear"></i></button>
                 </div>
-                <div class="option">
-                    <input type="checkbox" id="include-symbols">
-                    <label for="include-symbols">Include Symbols (e.g. &#$)</label>
-                </div>
-                <div class="option">
-                    <input type="checkbox" id="case-sensitive">
-                    <label for="case-sensitive">Case Sensitive<label>
-                </div>
-                <div class="option">
-                    <select id="number-of-characters">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                    </select>
-                    <label for="number-of-characters">Characters<label>
+                <div id="options-container" :class="optionsToggled ? 'toggled' : ''">
+                    <h3>Pin Number</h3>
+                    <div class="pin">
+                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                    </div>
+                    <h3>Password Options</h3>
+                    <div class="option">
+                        <label for="include-symbols">Include Symbols (e.g. &#$)</label>
+                        <span>
+                            <input type="checkbox" id="include-symbols" />
+                        </span>
+                    </div>
+                    <div class="option">
+                        <label for="case-sensitive">Case Sensitive</label>
+                        <span>
+                            <input type="checkbox" id="case-sensitive" />
+                        </span>
+                    </div>
+                    <div class="option">
+                        <label for="number-of-characters">Characters</label>
+                        <span>
+                        <select id="number-of-characters">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            </select>
+                        </span>
+                    </div>
                 </div>
             </section>
             <section id="the-magic">
@@ -88,6 +101,54 @@
     <footer>
 
     </footer>
+
+    <script>
+        function deadbolt() {
+            return {
+                optionsToggled: false,
+                showPhrase: false,
+                pinOne: 0,
+                pinTwo: 0,
+                pinThree: 0,
+                pinFour: 0,
+                toggleOptions() {
+                    console.log(this.optionsToggled);
+                    this.optionsToggled = !this.optionsToggled;
+                },
+                collapseOptions() {
+                    if (this.optionsToggled) {
+                        this.optionsToggled = false;
+                    }
+                },
+                pinNumberFocussed(e) {
+                    e.srcElement.value = '';
+                },
+                pinNumberBlurred(e) {
+                    
+                    var enteredValue = e.srcElement.value;
+                    console.log(enteredValue);
+                    if (enteredValue.length != 1) { 
+                        e.srcElement.value = '0';
+                    }
+                },
+                pinNumberEntered(e) {
+                    var enteredValue = e.srcElement.value;
+                    if (enteredValue.length === 1) { 
+                        let currentInput = e.srcElement;
+                        let foundNext = false;
+                        currentInput.blur();
+                        while (!foundNext && currentInput.nextElementSibling) {
+                            currentInput = currentInput.nextElementSibling;
+                            if (currentInput.tagName === "INPUT") {
+                                currentInput.focus();
+                                foundNext = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>    
 
   </body>
 </html>
