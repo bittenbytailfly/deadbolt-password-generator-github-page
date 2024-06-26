@@ -15,6 +15,9 @@ $enable-grid-classes: false;
 @import "bootstrap/_buttons";
 
 $redbolt: #db0000;
+$halfGutter: $grid-gutter-width/2;
+$doubleGutter: $grid-gutter-width*2;
+$quarterGutter: $grid-gutter-width/4;
 
 @import "blurb";
 @import "password-entry";
