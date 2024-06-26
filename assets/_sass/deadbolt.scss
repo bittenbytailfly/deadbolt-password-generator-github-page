@@ -21,9 +21,9 @@ $quarterGutter: $grid-gutter-width/4;
 
 @import "blurb";
 @import "password-entry";
-@import "the-magic";
 @import "password-options";
 @import "password-actions";
+@import "password-container";
 @import "desktop-overrides";
 
 body {
@@ -37,7 +37,34 @@ body {
   font-style: normal;
 }
 
-header, main, footer{
+h1 {
+  @extend h1;
+  margin: $grid-gutter-width;
+  text-align: center;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+#generated-heading {
+  @extend .container;
+  display: flex;
+  flex-direction: column;
+
+  >div {
+    @extend h1;
+    margin: $grid-gutter-width;
+    text-align: center;
+    
+
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+header, main, footer {
   display: flex;
   flex-direction: column;
 }
@@ -46,7 +73,7 @@ main {
   flex: 1;
 }
 
-header, main, footer {
+header, #blurb, #password-generator-container, footer {
     @extend .container;
 }
 
@@ -73,8 +100,10 @@ select {
 
 #input {
   background-color: #fff;
-  transition: height 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
   z-index: 1;
+  opacity: 1;
+  visibility: visible;
 }
 
 #output {
@@ -83,6 +112,6 @@ select {
 }
 
 .password-generated #input {
-  height: 0;
-  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
 }

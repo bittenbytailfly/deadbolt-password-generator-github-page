@@ -1,5 +1,9 @@
 @include media-breakpoint-up(lg) {
 
+    #password-generator {
+        background: #eee;
+        padding-bottom: $grid-gutter-width;
+      }
 
     label[for=memorable-phrase] {
         font-weight: 600;
