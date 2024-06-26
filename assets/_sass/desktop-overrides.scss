@@ -1,0 +1,51 @@
+@include media-breakpoint-up(lg) {
+
+
+    label[for=memorable-phrase] {
+        font-weight: 600;
+    }
+
+    #password-form {
+        padding-top: $grid-gutter-width;
+        @include make-row();
+    }
+
+    #password-entry {
+        @include make-col-ready();
+        @include make-col(8);
+        order: 12;
+    }
+
+    #password-options {
+        @include make-col-ready();
+        @include make-col(4);
+        order: 1;
+    }
+
+    #options-container {
+
+        padding: 0;
+
+        h3 {
+            font-size: 1rem;
+            padding: 2.5px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .option {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-direction: row-reverse;
+
+            label {
+                padding-left: $grid-gutter-width;
+            }
+
+            span {
+                
+            }
+        }
+    }
+}

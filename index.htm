@@ -13,95 +13,125 @@
     <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
     <link href="//fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   </head>
-  <body x-data="deadbolt()" :class="optionsToggled ? 'options-toggled' : ''">
+  <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''">
     
-    <header>
-        <h1>Deabolt Password Generator</h1>
-    </header>
+    <div id="input" :class="optionsToggled ? 'options-toggled' : ''">
 
-    <main>
+        <header>
+            <h1>Deabolt Password Generator</h1>
+        </header>
 
-        <section id="blurb">
-            <h2>Turn <strong>memorable phrases</strong> into <strong>strong passwords</strong></h2>
-            <p>If you struggle to come up with unique, strong passwords or use the same password for everything then Deadbolt Password Generator is the solution you've been waiting for.</p>
+        <main>
+
+            <section id="blurb">
+                <h2>Turn <strong>memorable phrases</strong> into <strong>strong passwords</strong></h2>
+                <p>If you struggle to come up with unique, strong passwords or use the same password for everything then Deadbolt Password Generator is the solution you've been waiting for.</p>
+            </section>
+
+            <form id="password-form">
+                <section id="password-entry">
+                    <label for="memorable-phrase">Memorable Phrase</label>
+                    <div class="phrase-entry">
+                        <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" autocomplete="false" />
+                        <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true" @touchend="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                    <button id="generate-button" x-show="passPhrase.length > 5" @click.prevent="generatePassword()">
+                        <i class="fa-solid fa-star-of-life"></i>&nbsp;
+                        Generate Password
+                    </button>
+                    <small x-show="passPhrase.length < 6">Enter at least <span id="remaining-character-count" x-text="charsRemaining">6 more characters</span></small>
+                </section>
+                <section id="password-options" :class="optionsToggled ? 'toggled' : ''" @click.outside="collapseOptions($event.target)">
+                    <div id="options-container">
+                        <h3>Pin Number</h3>
+                        <div class="pin">
+                            <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                            <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                            <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                            <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                        </div>
+                        <h3>Password Options</h3>
+                        <div class="option">
+                            <label for="include-symbols">Include Symbols (&#$)</label>
+                            <span>
+                                <input type="checkbox" id="include-symbols" x-model="includeSymbols" />
+                            </span>
+                        </div>
+                        <div class="option">
+                            <label for="case-sensitive">Case Sensitive</label>
+                            <span>
+                                <input type="checkbox" id="case-sensitive" x-model="caseSensitive"  />
+                            </span>
+                        </div>
+                        <div class="option">
+                            <label for="number-of-characters">Characters</label>
+                            <span>
+                            <select id="number-of-characters" x-model="numberOfCharacters">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+            </form>
+
+            <section id="faqs">
+
+            </section>
+
+            <div id="options-toggle-container">
+                <button id="options-toggle" x-on:click.prevent="toggleOptions()" class="options-toggler"><i class="fa-solid fa-gear options-toggler"></i></button>
+            </div>
+
+        </main>
+
+        <footer>
+
+        </footer>
+
+    </div>
+
+    <div id="output">
+
+        <section id="password-actions">
+
+            <button @click.prevent="show()">
+                <i class="fa-solid fa-eye"></i>&nbsp;
+                Show
+            </button>
+
+            <button @click.prevent="copy()">
+                <i class="fa-regular fa-copy"></i>&nbsp;
+                Copy
+            </button>
+
+            <button @click.prevent="reset()">
+                <i class="fa-solid fa-rotate-left"></i>&nbsp;
+                Reset
+            </button>
+
+            <button @click.prevent="back()">
+                <i class="fa-solid fa-arrow-left"></i>&nbsp;
+                Back
+            </button>
+
         </section>
 
-        <form id="password-form">
-            <section id="password-entry">
-                <label for="memorable-phrase">Memorable Phrase</label>
-                <div class="phrase-entry">
-                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" autocomplete="false" />
-                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true" @touchend="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
-                </div>
-                <small x-show="passPhrase.length < 6">Enter at least <span id="remaining-character-count" x-text="charsRemaining">6 more characters</span></small>
-            </section>
-            <section id="password-options" :class="optionsToggled ? 'toggled' : ''">
-                <div id="options-container">
-                    <h3>Pin Number</h3>
-                    <div class="pin">
-                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                    </div>
-                    <h3>Password Options</h3>
-                    <div class="option">
-                        <label for="include-symbols">Include Symbols (&#$)</label>
-                        <span>
-                            <input type="checkbox" id="include-symbols" />
-                        </span>
-                    </div>
-                    <div class="option">
-                        <label for="case-sensitive">Case Sensitive</label>
-                        <span>
-                            <input type="checkbox" id="case-sensitive" />
-                        </span>
-                    </div>
-                    <div class="option">
-                        <label for="number-of-characters">Characters</label>
-                        <span>
-                        <select id="number-of-characters">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                            </select>
-                        </span>
-                    </div>
-                </div>
-            </section>
-            <section id="the-magic" x-show="passPhrase.length > 5">
-                <button>
-                    <i class="fa-solid fa-star-of-life"></i>&nbsp;
-                    Generate Password
-                </button>
-            </section>
-        </form>
-
-        <section id="faqs">
-
-        </section>
-
-        <div id="options-toggle-container">
-            <button id="options-toggle" x-on:click.prevent="toggleOptions()"><i class="fa-solid fa-gear"></i></button>
-        </div>
-
-    </main>
-
-    <footer>
-
-    </footer>
+    </div>
 
     <script>
         function deadbolt() {
@@ -114,15 +144,19 @@
                 pinTwo: 0,
                 pinThree: 0,
                 pinFour: 0,
+                includeSymbols: true,
+                caseSensitive: true,
+                numberOfCharacters: 15,
+                passwordGenerated: false,
                 phraseChanged(){
                     this.charsRemaining = (6 - this.passPhrase.length) + ' more character' + (this.passPhrase.length == 5 ? '' : 's');
                 },
                 toggleOptions() {
-                    console.log(this.optionsToggled);
+                    
                     this.optionsToggled = !this.optionsToggled;
                 },
-                collapseOptions() {
-                    if (this.optionsToggled) {
+                collapseOptions(target) {
+                    if (!target.classList.contains("options-toggler") && this.optionsToggled) {
                         this.optionsToggled = false;
                     }
                 },
@@ -150,6 +184,24 @@
                             }
                         }
                     }
+                },
+                generatePassword() {
+                    this.passwordGenerated = true;
+                },
+                back() {
+                    this.passwordGenerated = false;
+                },
+                reset() {
+                    this.passwordGenerated = false;
+                    this.pinOne = 0;
+                    this.pinTwo = 0;
+                    this.pinThree = 0;
+                    this.pinFour = 0;
+                    this.caseSensitive = true;
+                    this.includeSymbols = true;
+                    this.numberOfCharacters = 15;
+                    this.passPhrase = '';
+                    this.phraseChanged();a
                 }
             }
         }
