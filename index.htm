@@ -30,16 +30,13 @@
             <section id="password-entry">
                 <label for="memorable-phrase">Memorable Phrase</label>
                 <div class="phrase-entry">
-                    <input :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" />
-                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
+                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" />
+                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true"@touchend="showPhrase=true"  @click.prevent><i class="fa-solid fa-eye"></i></button>
                 </div>
-                <small>Enter at least <span id="remaining-character-count">6 more</span> characters</small>
+                <small x-show="passPhrase.length < 6">Enter at least <span id="remaining-character-count" x-text="charsRemaining">6 more characters</span></small>
             </section>
-            <section id="password-options">
-                <div id="options-toggle-container">
-                    <button id="options-toggle" x-on:click.prevent="toggleOptions()"><i class="fa-solid fa-gear"></i></button>
-                </div>
-                <div id="options-container" :class="optionsToggled ? 'toggled' : ''">
+            <section id="password-options" :class="optionsToggled ? 'toggled' : ''">
+                <div id="options-container">
                     <h3>Pin Number</h3>
                     <div class="pin">
                         <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
@@ -49,7 +46,7 @@
                     </div>
                     <h3>Password Options</h3>
                     <div class="option">
-                        <label for="include-symbols">Include Symbols (e.g. &#$)</label>
+                        <label for="include-symbols">Include Symbols (&#$)</label>
                         <span>
                             <input type="checkbox" id="include-symbols" />
                         </span>
@@ -84,7 +81,7 @@
                     </div>
                 </div>
             </section>
-            <section id="the-magic">
+            <section id="the-magic" x-show="passPhrase.length > 5">
                 <button>
                     <i class="fa-solid fa-star-of-life"></i>&nbsp;
                     Generate Password
@@ -96,6 +93,10 @@
 
         </section>
 
+        <div id="options-toggle-container">
+            <button id="options-toggle" x-on:click.prevent="toggleOptions()"><i class="fa-solid fa-gear"></i></button>
+        </div>
+
     </main>
 
     <footer>
@@ -105,12 +106,17 @@
     <script>
         function deadbolt() {
             return {
+                passPhrase: '',
+                charsRemaining: '6 more characters',
                 optionsToggled: false,
                 showPhrase: false,
                 pinOne: 0,
                 pinTwo: 0,
                 pinThree: 0,
                 pinFour: 0,
+                phraseChanged(){
+                    this.charsRemaining = (6 - this.passPhrase.length) + ' more character' + (this.passPhrase.length == 5 ? '' : 's');
+                },
                 toggleOptions() {
                     console.log(this.optionsToggled);
                     this.optionsToggled = !this.optionsToggled;

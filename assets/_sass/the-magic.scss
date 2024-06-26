@@ -1,4 +1,7 @@
 #the-magic {
+
+    margin-top: $grid-gutter-width;
+
     button {
         @extend .btn;
         @include button-variant(darken($redbolt, 5%), darken($redbolt, 20%));
