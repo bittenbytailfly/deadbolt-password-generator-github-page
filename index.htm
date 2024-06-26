@@ -30,8 +30,8 @@
             <section id="password-entry">
                 <label for="memorable-phrase">Memorable Phrase</label>
                 <div class="phrase-entry">
-                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" />
-                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true"@touchend="showPhrase=true"  @click.prevent><i class="fa-solid fa-eye"></i></button>
+                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" autocomplete="false" />
+                    <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true" @touchend="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
                 </div>
                 <small x-show="passPhrase.length < 6">Enter at least <span id="remaining-character-count" x-text="charsRemaining">6 more characters</span></small>
             </section>
@@ -130,7 +130,6 @@
                     e.srcElement.value = '';
                 },
                 pinNumberBlurred(e) {
-                    
                     var enteredValue = e.srcElement.value;
                     console.log(enteredValue);
                     if (enteredValue.length != 1) { 
