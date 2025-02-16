@@ -18,6 +18,7 @@ $redbolt: #db0000;
 $halfGutter: $grid-gutter-width/2;
 $doubleGutter: $grid-gutter-width*2;
 $quarterGutter: $grid-gutter-width/4;
+$optionsTransitionTime: 0.25s;
 
 @import "blurb";
 @import "password-entry";
@@ -103,7 +104,7 @@ select {
 
 #input {
   background-color: #fff;
-  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out, filter $optionsTransitionTime ease-in-out;
   z-index: 1;
   opacity: 1;
   visibility: visible;
