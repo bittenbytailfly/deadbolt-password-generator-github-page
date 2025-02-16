@@ -1,3 +1,8 @@
 # Site Settings
 title: Deadbolt Password Generator          # Your website's title
-description: Deadbolt Password Generator # A short description
+description: A sample Jekyll site # A short description
+
+# Build Settings
+sass:
+  sass_dir: assets/_sass
+  style: compressed
