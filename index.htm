@@ -240,13 +240,13 @@
                 pinNumberFocussed(e) {
                     e.target.select();
                 },
-                // pinNumberBlurred(e) {
+                pinNumberBlurred(e) {
                 //     const el = e.target;
                 //     if (el.value.length !== 1) { 
                 //         el.value = '0';
                 //     }
                 //     el.type = 'number';
-                // },
+                },
                 pinNumberEntered(e) {
                     var enteredValue = e.srcElement.value;
                     if (enteredValue.length === 1) { 
