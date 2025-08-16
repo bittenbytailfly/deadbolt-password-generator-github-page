@@ -1,0 +1,13 @@
+#faqs {
+    margin-top: $grid-gutter-width*2;
+    padding-top: $grid-gutter-width;
+    border-top: 3px solid $redbolt;
+    border-bottom: 3px solid $redbolt;
+    background-color: #000;
+    color: #999;
+
+    h3 {
+        font-weight: bold;
+        color: #bbb
+    }
+}
