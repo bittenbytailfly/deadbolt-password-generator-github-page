@@ -246,19 +246,19 @@
                 //     el.type = 'number';
                 },
                 pinNumberEntered(e) {
-                    var enteredValue = e.srcElement.value;
-                    if (enteredValue.length === 1) { 
-                        let currentInput = e.srcElement;
-                        let foundNext = false;
-                        //currentInput.blur();
-                        while (!foundNext && currentInput.nextElementSibling) {
-                            currentInput = currentInput.nextElementSibling;
-                            if (currentInput.tagName === "INPUT") {
-                                currentInput.focus();
-                                foundNext = true;
-                            }
-                        }
-                    }
+                    // var enteredValue = e.srcElement.value;
+                    // if (enteredValue.length === 1) { 
+                    //     let currentInput = e.srcElement;
+                    //     let foundNext = false;
+                    //     //currentInput.blur();
+                    //     while (!foundNext && currentInput.nextElementSibling) {
+                    //         currentInput = currentInput.nextElementSibling;
+                    //         if (currentInput.tagName === "INPUT") {
+                    //             currentInput.focus();
+                    //             foundNext = true;
+                    //         }
+                    //     }
+                    // }
                 },
                 generatePassword() {
                     var self = this;
