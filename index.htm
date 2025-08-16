@@ -1,4 +1,4 @@
----
+﻿---
 ---
 <!doctype html>
 <html lang="en">
@@ -312,8 +312,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-
             const fab = document.getElementById('options-toggle-container');
             const popupOverlay = document.getElementById('legacy-mode-notification-overlay');
             const closeButton = document.getElementById('acknowledge-legacy-mode-button');
@@ -329,6 +327,13 @@
                 popupOverlay.style.display = 'none';
                 fab.classList.add('show');
                 localStorage.setItem('legacyModeAcknowledged', 'true');
+            });
+
+            pinInputs.forEach(input => {
+                input.addEventListener('click', function(event) {
+                    // This stops the click from bubbling up to parent elements
+                    event.stopPropagation();
+                });
             });
 
         });
