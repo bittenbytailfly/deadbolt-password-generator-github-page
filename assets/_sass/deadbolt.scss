@@ -28,6 +28,11 @@ $optionsTransitionTime: 0.25s;
 @import "faqs";
 @import "desktop-overrides";
 @import "footer";
+@import "legacy-mode-popup";
+
+[x-cloak] {
+    display: none !important;
+}
 
 html, body {
   height: 100%;

@@ -13,7 +13,7 @@
   </head>
   <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''">
     
-    <div id="input" :class="optionsToggled ? 'options-toggled' : ''">
+    <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-cloak>
 
         <div id="input-content">
 
@@ -173,8 +173,19 @@
             </button>
 
         </section>
-        
 
+    </div>
+
+    <div id="legacy-mode-notification-overlay">
+        <div id="legacy-mode-notification">
+            <h3>Important!</h3>
+            <p>In this new look Deadbolt, the algorithm for generating passwords has been improved.</p>
+            <p>
+                If you used Deadbolt to generate passwords using the previous version, you will need to enable <strong>"Legacy mode"</strong> in the settings to ensure that the passwords are the same. 
+            </p>
+            <p>Alternatively if you're not quite ready to switch to the new interface, you can still access the <a href="/previous-version.htm">previous version</a>.</p>
+            <button id="acknowledge-legacy-mode-button">Got it!</button>
+        </div>
     </div>
 
     <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
@@ -286,6 +297,24 @@
             }
         }
     </script>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const popupOverlay = document.getElementById('legacy-mode-notification-overlay');
+            const closeButton = document.getElementById('acknowledge-legacy-mode-button');
+
+            if (localStorage.getItem('legacyModeAcknowledged') !== 'true') {
+                popupOverlay.style.display = 'flex';
+            }
+
+            closeButton.addEventListener('click', function() {
+                popupOverlay.style.display = 'none';
+                localStorage.setItem('legacyModeAcknowledged', 'true');
+            });
+
+        });
+    </script>
 
     <script>
         function movePasswordOptions() {
