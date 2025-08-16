@@ -61,10 +61,10 @@
                                 <div id="options-container">
                                     <h3>Pin Number</h3>
                                     <div class="pin">
-                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)"  @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)"autocomplete="false" />
+                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
                                     </div>
                                     <h3>Password Options</h3>
                                     <div class="option">
@@ -235,12 +235,10 @@
                     }
                 },
                 pinNumberFocussed(e) {
-                    const el = e.target;
-                    el.type = 'tel';
-                    // Use $nextTick to wait for the DOM to update after the type change
-                    this.$nextTick(() => {
-                        el.select();
-                    });
+                    e.target.select();
+                },
+                pinNumberFocussed(e) {
+                    e.target.select();
                 },
                 pinNumberBlurred(e) {
                     const el = e.target;
