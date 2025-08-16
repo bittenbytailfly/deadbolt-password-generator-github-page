@@ -301,15 +301,21 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
+
+            const fab = document.getElementById('options-toggle-container');
             const popupOverlay = document.getElementById('legacy-mode-notification-overlay');
             const closeButton = document.getElementById('acknowledge-legacy-mode-button');
 
             if (localStorage.getItem('legacyModeAcknowledged') !== 'true') {
                 popupOverlay.style.display = 'flex';
             }
+            else {
+                fab.classList.add('show');
+            }
 
             closeButton.addEventListener('click', function() {
                 popupOverlay.style.display = 'none';
+                fab.classList.add('show');
                 localStorage.setItem('legacyModeAcknowledged', 'true');
             });
 
