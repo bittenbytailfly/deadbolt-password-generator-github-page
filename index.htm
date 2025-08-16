@@ -61,10 +61,10 @@
                                 <div id="options-container">
                                     <h3>Pin Number</h3>
                                     <div class="pin">
-                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @click="handlePinFocus($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @click="handlePinFocus($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @click="handlePinFocus($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @click="handlePinFocus($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" autocomplete="false" />
                                     </div>
                                     <h3>Password Options</h3>
                                     <div class="option">
@@ -234,17 +234,20 @@
                         this.optionsToggled = false;
                     }
                 },
-                handlePinFocus(e) {
+                pinNumberFocussed(e) {
+                    const el = e.target;
+                    el.type = 'tel';
+                    // Use $nextTick to wait for the DOM to update after the type change
                     this.$nextTick(() => {
-                        e.target.select();
+                        el.select();
                     });
                 },
                 pinNumberBlurred(e) {
-                    var enteredValue = e.srcElement.value;
-                    console.log(enteredValue);
-                    if (enteredValue.length != 1) { 
-                        e.srcElement.value = '0';
+                    const el = e.target;
+                    if (el.value.length !== 1) { 
+                        el.value = '0';
                     }
+                    el.type = 'number';
                 },
                 pinNumberEntered(e) {
                     var enteredValue = e.srcElement.value;
