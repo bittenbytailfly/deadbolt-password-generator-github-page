@@ -235,7 +235,8 @@
                     }
                 },
                 pinNumberFocussed(e) {
-                    e.target.select();
+                    const el = e.target;
+                    el.value = '';
                 },
                 pinNumberBlurred(e) {
                 //     const el = e.target;
