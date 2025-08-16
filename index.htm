@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Deadbolt Password Generator</title>
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
-    <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
     <link rel="preconnect" href="//fonts.googleapis.com">
     <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
     <link href="//fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -29,7 +27,7 @@
 
                 <section id="blurb">
                     <h2>Turn <strong>memorable phrases</strong> into <strong>strong passwords</strong></h2>
-                    <p>If you struggle to come up with unique, strong passwords or use the same password for everything then Deadbolt Password Generator is the solution you've been waiting for.</p>
+                    <p>If you struggle to come up with unique, strong passwords or use the same password for everything then Deadbolt Password Generator is for you.</p>
                 </section>
 
                 <section id="password-generator">
@@ -57,6 +55,12 @@
                                         <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
                                     </div>
                                     <h3>Password Options</h3>
+                                    <div class="option">
+                                        <label for="legacy-mode">Legacy Mode</label>
+                                        <span>
+                                            <input type="checkbox" id="legacy-mode" x-model="legacyMode"  />
+                                        </span>
+                                    </div>
                                     <div class="option">
                                         <label for="include-symbols">Include Symbols (&#$)</label>
                                         <span>
@@ -107,7 +111,9 @@
             </main>
 
             <footer>
-                
+                <p>&copy; Copyright, Ed Carter 2009-{{ site.time | date: '%Y' }}</p>
+                <p>I love it, and <a href="https://commerce.coinbase.com/checkout/479c5aa4-3c96-428d-8d00-ea7a7c8efda6" target="_blank">I'd like to buy you a coffee</a> to help with future developments!</p>
+                <p>I hate it - <a href="previous-version.htm" rel="nofollow"> take me back to the old version</a>!</p>
             </footer>
 
         </div>
@@ -135,8 +141,6 @@
                         <dd x-text="generatedPassword"></dd>
                     </dl>
                 </div>
-
-                <div x-text="numberOfCharacters"></div>
 
                 <div id="password-chars">
                     <template x-for="i in numberOfCharacters">
@@ -173,11 +177,16 @@
 
     </div>
 
+    <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="/js/deadbolt.js"></script>
+
     <script>
         function deadbolt() {
             return {
                 passPhrase: '',
                 charsRemaining: '6 more characters',
+                legacyMode: false,
                 optionsToggled: false,
                 showPhrase: false,
                 pinOne: 0,
@@ -228,8 +237,17 @@
                     }
                 },
                 generatePassword() {
+                    var self = this;
                     this.passwordGenerated = true;
-                    this.generatedPassword = "jdfkjsdkfjsdfsss"
+                    this.generatedPassword = deadboltPasswordGenerator.encodePassword(
+                        self.passPhrase,
+                        {
+                            engineId: self.legacyMode ? 0 : 1,
+                            pin: '' + self.pinOne + self.pinTwo + self.pinThree + self.pinFour,
+                            useSpecial: self.includeSymbols,
+                            caseSensitive: self.caseSensitive,
+                            passwordLength: self.numberOfCharacters
+                        });
                 },
                 back() {
                     this.passwordGenerated = false;
@@ -269,29 +287,31 @@
         }
     </script>    
 
-<script>function movePasswordOptions() {
-    const passwordOptions = document.getElementById('password-options');
-    const body = document.body;
-    const inputContent = document.getElementById('input-content'); // Or the appropriate container
-  
-    if (window.innerWidth <= 991.98) { // Your mobile breakpoint
-      body.appendChild(passwordOptions); // Move to the end of the body
-      // Optionally, adjust styles here (e.g., add padding to #input)
-      inputContent.style.paddingBottom = '120px'; // Adjust as needed
-    } else {
-      // For desktop, move it back to its original container
-      const originalContainer = document.getElementById('password-form'); // Or the correct parent
-      originalContainer.appendChild(passwordOptions);
-      // Reset styles if needed
-      inputContent.style.paddingBottom = '0'; // Or your default padding
-    }
-  }
-  
-  // Call the function initially
-  movePasswordOptions();
-  
-  // Call the function on window resize
-  window.addEventListener('resize', movePasswordOptions);</script>
+    <script>
+        function movePasswordOptions() {
+            const passwordOptions = document.getElementById('password-options');
+            const body = document.body;
+            const inputContent = document.getElementById('input-content'); // Or the appropriate container
+        
+            if (window.innerWidth <= 991.98) { // Your mobile breakpoint
+            body.appendChild(passwordOptions); // Move to the end of the body
+            // Optionally, adjust styles here (e.g., add padding to #input)
+            inputContent.style.paddingBottom = '120px'; // Adjust as needed
+            } else {
+            // For desktop, move it back to its original container
+            const originalContainer = document.getElementById('password-form'); // Or the correct parent
+            originalContainer.appendChild(passwordOptions);
+            // Reset styles if needed
+            inputContent.style.paddingBottom = '0'; // Or your default padding
+            }
+        }
+        
+        // Call the function initially
+        movePasswordOptions();
+        
+        // Call the function on window resize
+        window.addEventListener('resize', movePasswordOptions);
+    </script>
 
   </body>
 </html>

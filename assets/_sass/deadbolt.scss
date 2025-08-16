@@ -27,6 +27,7 @@ $optionsTransitionTime: 0.25s;
 @import "password-container";
 @import "faqs";
 @import "desktop-overrides";
+@import "footer";
 
 html, body {
   height: 100%;
@@ -88,6 +89,10 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+  @extend .form-control;
+}
+
+#memorable-phrase {
   @extend .form-control;
 }
 
