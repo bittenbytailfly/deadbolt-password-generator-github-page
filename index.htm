@@ -61,10 +61,10 @@
                                 <div id="options-container">
                                     <h3>Pin Number</h3>
                                     <div class="pin">
-                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)"  @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)"autocomplete="false" />
-                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown="preparePinInput($event)" @touchstart="preparePinInput($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinOne" x-ref="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown.prevent="handlePinClick('pinOne')" @touchstart.prevent="handlePinClick('pinOne')" autocomplete="false" />
+                                        <input type="number" x-model="pinTwo" x-ref="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)"  @mousedown.prevent="handlePinClick('pinTwo')" @touchstart.prevent="handlePinClick('pinTwo')"autocomplete="false" />
+                                        <input type="number" x-model="pinThree" x-ref="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown.prevent="handlePinClick('pinThree')" @touchstart.prevent="handlePinClick('pinThree')" autocomplete="false" />
+                                        <input type="number" x-model="pinFour" x-ref="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)"  @blur="pinNumberBlurred($event)" @mousedown.prevent="handlePinClick('pinFour')" @touchstart.prevent="handlePinClick('pinFour')" autocomplete="false" />
                                     </div>
                                     <h3>Password Options</h3>
                                     <div class="option">
@@ -261,6 +261,16 @@
                             }
                         }
                     }
+                },
+                handlePinClick(pinRef) {
+                    const inputElement = this.$refs[pinRef];
+
+                    // The timeout gives the browser a moment to process the tap
+                    // before we programmatically focus the element.
+                    setTimeout(() => {
+                        inputElement.focus();
+                        inputElement.select();
+                    }, 50); // A 50ms delay is usually enough
                 },
                 generatePassword() {
                     var self = this;
