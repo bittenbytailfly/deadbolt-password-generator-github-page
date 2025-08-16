@@ -252,7 +252,7 @@
                     if (enteredValue.length === 1) { 
                         let currentInput = e.srcElement;
                         let foundNext = false;
-                        currentInput.blur();
+                        //currentInput.blur();
                         while (!foundNext && currentInput.nextElementSibling) {
                             currentInput = currentInput.nextElementSibling;
                             if (currentInput.tagName === "INPUT") {
