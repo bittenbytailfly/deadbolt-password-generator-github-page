@@ -1,17 +1,17 @@
-﻿---
+---
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script>
+    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script> -->
     <!-- End Google Tag Manager -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>Deadbolt Password Generator</title>
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
     <link rel="preconnect" href="//fonts.googleapis.com">
@@ -21,8 +21,8 @@
   <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''">
     
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
     <!-- End Google Tag Manager (noscript) -->
 
     <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-cloak>
@@ -61,10 +61,10 @@
                                 <div id="options-container">
                                     <h3>Pin Number</h3>
                                     <div class="pin">
-                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
-                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" @keyup="pinNumberEntered($event)" @change="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" autocomplete="false" />
+                                        <input type="number" x-model="pinOne" id="pinOne" min="0" max="9" autocomplete="false" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" />
+                                        <input type="number" x-model="pinTwo" id="pinTwo" min="0" max="9" autocomplete="false" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" />
+                                        <input type="number" x-model="pinThree" id="pinThree" min="0" max="9" autocomplete="false" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" />
+                                        <input type="number" x-model="pinFour" id="pinFour" min="0" max="9" autocomplete="false" @keyup="pinNumberEntered($event)" @focus="pinNumberFocussed($event)" @blur="pinNumberBlurred($event)" />
                                     </div>
                                     <h3>Password Options</h3>
                                     <div class="option">
@@ -235,13 +235,13 @@
                     }
                 },
                 pinNumberFocussed(e) {
-                    e.srcElement.value = '';
+                    const el = e.target;
+                    el.value = '';
                 },
                 pinNumberBlurred(e) {
-                    var enteredValue = e.srcElement.value;
-                    console.log(enteredValue);
-                    if (enteredValue.length != 1) { 
-                        e.srcElement.value = '0';
+                    const el = e.target;
+                    if (el.value.length !== 1) { 
+                        el.value = '0';
                     }
                 },
                 pinNumberEntered(e) {
@@ -328,14 +328,6 @@
                 fab.classList.add('show');
                 localStorage.setItem('legacyModeAcknowledged', 'true');
             });
-
-            pinInputs.forEach(input => {
-                input.addEventListener('click', function(event) {
-                    // This stops the click from bubbling up to parent elements
-                    event.stopPropagation();
-                });
-            });
-
         });
     </script>
 
@@ -343,18 +335,21 @@
         function movePasswordOptions() {
             const passwordOptions = document.getElementById('password-options');
             const body = document.body;
-            const inputContent = document.getElementById('input-content'); // Or the appropriate container
-        
-            if (window.innerWidth <= 991.98) { // Your mobile breakpoint
-            body.appendChild(passwordOptions); // Move to the end of the body
-            // Optionally, adjust styles here (e.g., add padding to #input)
-            inputContent.style.paddingBottom = '120px'; // Adjust as needed
+            const inputContent = document.getElementById('input-content');
+            
+            if (window.innerWidth <= 991.98) {
+                // ONLY move the element if it's not already a child of the body
+                if (passwordOptions.parentNode !== body) {
+                    body.appendChild(passwordOptions);
+                }
+                inputContent.style.paddingBottom = '120px';
             } else {
-            // For desktop, move it back to its original container
-            const originalContainer = document.getElementById('password-form'); // Or the correct parent
-            originalContainer.appendChild(passwordOptions);
-            // Reset styles if needed
-            inputContent.style.paddingBottom = '0'; // Or your default padding
+                const originalContainer = document.getElementById('password-form');
+                // ONLY move it back if it's not already in the original container
+                if (passwordOptions.parentNode !== originalContainer) {
+                    originalContainer.appendChild(passwordOptions);
+                }
+                inputContent.style.paddingBottom = '0';
             }
         }
         
