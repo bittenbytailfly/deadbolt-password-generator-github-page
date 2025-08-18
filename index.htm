@@ -4,11 +4,11 @@
 <html lang="en">
   <head>
     <!-- Google Tag Manager -->
-    <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script> -->
+    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -21,14 +21,14 @@
     <link rel="apple-touch-icon" href="/assets/images/deadbolt-logo-180x180.png">
     <link rel="manifest" href="/manifest.json">
   </head>
-  <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''">
+  <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''" x-cloak>
     
     <!-- Google Tag Manager (noscript) -->
-    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-cloak>
+    <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-init="initialize()">
 
         <div id="input-content">
 
@@ -51,7 +51,7 @@
                             <section id="password-entry">
                                 <label for="memorable-phrase">Memorable Phrase</label>
                                 <div class="phrase-entry">
-                                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" autocomplete="false" />
+                                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="off" @keyup="phraseChanged()" @change="phraseChanged()" />
                                     <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true" @touchend="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
                                 </div>
                                 <button id="generate-button" x-show="passPhrase.length > 5" @click.prevent="generatePassword()">
@@ -147,7 +147,7 @@
             </div>
         </section>
 
-        <template  x-if="passwordGenerated">
+        <template x-if="passwordGenerated">
 
             <section id="password-container">
                 <div id="full-password">
@@ -203,6 +203,21 @@
         </div>
     </div>
 
+    <div id="app-install-notification-overlay" x-show="showingInstallPrompt">
+        <div id="app-install-notification">
+            <h3>Add to Home Screen?</h3>
+            <p>You can add Deadbolt to your home screen, for <strong>faster access</strong> and <strong>offline capabilities</strong>.</p>
+            <p>
+               Would you like to enable this?
+            </p>
+            <div class="install-options">
+                <button id="request-install-button" @click.prevent="appInstallRequested()">Yes Please!</button>
+                <button id="defer-install-button" @click.prevent="appInstallDeferred()">Maybe Later ...</button>
+            </div>
+            <a id="reject-install-link" @click.prevent="appInstallRejected()">I'll just continue to use the online version</a>
+        </div>
+    </div>
+
     <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="/js/deadbolt.js"></script>
@@ -225,6 +240,17 @@
                 passwordGenerated: false,
                 generatedPassword: '',
                 passwordCopied: false,
+                deferredInstallPrompt : null,
+                showingInstallPrompt: false,
+                hideInstallPrompt: false,
+                initialize() {
+                    // Capture the install prompt for later use
+                    this.hideInstallPrompt = localStorage.getItem('hideInstallPrompt') !== 'false'
+                    window.addEventListener('beforeinstallprompt', (e) => {
+                        e.preventDefault();
+                        this.deferredInstallPrompt = e;
+                    });
+                },
                 phraseChanged(){
                     this.charsRemaining = (6 - this.passPhrase.length) + ' more character' + (this.passPhrase.length == 5 ? '' : 's');
                 },
@@ -277,6 +303,7 @@
                 },
                 back() {
                     this.passwordGenerated = false;
+                    this.promptForAppInstall();
                 },
                 reset() {
                     this.passwordGenerated = false;
@@ -289,6 +316,7 @@
                     this.numberOfCharacters = 15;
                     this.passPhrase = '';
                     this.phraseChanged();
+                    this.promptForAppInstall();
                 },
                 copy() {
                     var copyText = document.getElementById("password-to-copy");
@@ -304,10 +332,26 @@
                     }, 3000);
                 },
                 getPasswordCharacter(i){
-                    console.log(i);
                     return this.generatedPassword.length < i
                         ? ''
                         : this.generatedPassword.substring(i-1, i);
+                },
+                promptForAppInstall() {
+                    if (this.deferredInstallPrompt != null && !this.hideInstallPrompt) {
+                        this.showingInstallPrompt = true;
+                    }
+                },
+                appInstallRequested() {
+                    this.deferredInstallPrompt.prompt();
+                    this.showingInstallPrompt = false;
+                },
+                appInstallDeferred() {
+                    this.showingInstallPrompt = false;
+                },
+                appInstallRejected() {
+                    localStorage.setItem('hideInstallPrompt', 'true');
+                    this.showingInstallPrompt = false;
+                    this.hideInstallPrompt = true;
                 }
             }
         }
@@ -332,9 +376,24 @@
                 localStorage.setItem('legacyModeAcknowledged', 'true');
             });
         });
-    </script>
 
-    <script>
+        // Check if service workers are supported by the browser
+        if ('serviceWorker' in navigator) {
+            // Wait until the page is fully loaded
+            window.addEventListener('load', () => {
+                // Register the service worker file
+                navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    // Log success to the console
+                    console.log('Service Worker registered successfully:', registration);
+                })
+                .catch(error => {
+                    // Log any errors to the console
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+
         function movePasswordOptions() {
             const passwordOptions = document.getElementById('password-options');
             const body = document.body;
