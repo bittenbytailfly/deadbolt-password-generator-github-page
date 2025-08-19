@@ -249,6 +249,12 @@
                 showingLegacyModePrompt: false,
                 fabButtonReady: false,
                 initialize() {
+                    // Record initialization event
+                    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+                    window.dataLayer.push({
+                        'event': 'appInitialized',
+                        'displayMode': isStandalone ? 'standalone' : 'browser' 
+                    });
                     // Capture the install prompt for later use
                     this.hideInstallPrompt = localStorage.getItem('hideInstallPrompt') === 'true';
                     window.addEventListener('beforeinstallprompt', (e) => {
@@ -343,7 +349,7 @@
                             caseSensitive: self.caseSensitive,
                             passwordLength: self.numberOfCharacters
                         });
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'passwordGenerated',
                         args: {
                             legacyMode: self.legacyMode,
@@ -356,7 +362,7 @@
                 },
                 back() {
                     this.passwordGenerated = false;
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'backButtonPressed'
                     });
                     this.promptForAppInstall();
@@ -372,7 +378,7 @@
                     this.numberOfCharacters = 15;
                     this.passPhrase = '';
                     this.phraseChanged();
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'resetButtonPressed'
                     });
                     this.promptForAppInstall();
@@ -389,7 +395,7 @@
                     setTimeout(() => {
                         this.passwordCopied = false;
                     }, 3000);
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'passwordCopiedToClipboard'
                     });
                 },
@@ -401,7 +407,7 @@
                 promptForAppInstall() {
                     if (this.deferredInstallPrompt != null && !this.hideInstallPrompt) {
                         this.showingInstallPrompt = true;
-                        dataLayer.push({
+                        window.dataLayer.push({
                             event: 'userPromptedForAppInstall'
                         });
                     }
@@ -409,14 +415,14 @@
                 appInstallRequested() {
                     this.deferredInstallPrompt.prompt();
                     this.showingInstallPrompt = false;
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'userInstalledApp'
                     });
                 },
                 appInstallDeferred() {
                     this.showingInstallPrompt = false;
                     this.hideInstallPrompt = true;
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'userDeferredAppInstall'
                     });
                 },
@@ -424,7 +430,7 @@
                     localStorage.setItem('hideInstallPrompt', 'true');
                     this.showingInstallPrompt = false;
                     this.hideInstallPrompt = true;
-                    dataLayer.push({
+                    window.dataLayer.push({
                         event: 'userRejectedAppInstall'
                     });
                 },
