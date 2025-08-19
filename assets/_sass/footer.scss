@@ -1,3 +1,17 @@
 footer {
     margin-top: $grid-gutter-width*2;
+
+    .web-only {
+        display: none;
+    }
+
+    @media all and (display-mode: browser) {
+        span.web-only {
+            display: inline;
+        }
+
+        p.web-only {
+            display: block;
+        }
+    }
 }
