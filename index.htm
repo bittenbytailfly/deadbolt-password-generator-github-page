@@ -131,7 +131,7 @@
             <footer>
                 <p>&copy; Copyright, Ed Carter 2009-{{ site.time | date: '%Y' }}</p>
                 <p><span class="web-only">I love it, and </span><a href="https://commerce.coinbase.com/checkout/479c5aa4-3c96-428d-8d00-ea7a7c8efda6" id="buy-me-a-coffee-link" target="_blank">I'd like to buy you a coffee</a> to help with future developments!</p>
-                <p class="web-only">I hate it - <a href="previous-version.htm" id="old-version-request-link" rel="nofollow"> take me back to the old version</a>!</p>
+                <p class="web-only">I hate it - <a href="previous-version.htm" id="old-version-request-link" rel="nofollow" target="_blank"> take me back to the old version</a>!</p>
             </footer>
 
         </div>
@@ -201,7 +201,7 @@
             <p>
                 If you used Deadbolt to generate passwords using the previous version, you will need to enable <strong>"Legacy mode"</strong> in the settings to ensure that the passwords are the same. 
             </p>
-            <p>Alternatively if you're not quite ready to switch to the new interface, you can still access the <a href="/previous-version.htm">previous version</a>.</p>
+            <p>Alternatively if you're not quite ready to switch to the new interface, you can still access the <a href="/previous-version.htm" id="old-version-request-popup-link" rel="nofollow" target="_blank">previous version</a>.</p>
             <button id="acknowledge-legacy-mode-button" @click.prevent="acknowledgeLegacyMode()">Got it!</button>
         </div>
     </div>
