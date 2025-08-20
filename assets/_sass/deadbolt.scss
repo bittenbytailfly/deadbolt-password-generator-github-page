@@ -29,6 +29,7 @@ $optionsTransitionTime: 0.25s;
 @import "desktop-overrides";
 @import "footer";
 @import "legacy-mode-popup";
+@import "app-install-popup";
 
 [x-cloak] {
     display: none !important;

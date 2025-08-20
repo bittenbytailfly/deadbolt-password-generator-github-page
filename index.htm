@@ -3,12 +3,15 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    </script>
     <!-- Google Tag Manager -->
-    <!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script> -->
+    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -17,15 +20,18 @@
     <link rel="preconnect" href="//fonts.googleapis.com">
     <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
     <link href="//fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="apple-touch-icon" href="/assets/images/deadbolt-logo-180x180.png">
+    <link rel="manifest" href="/manifest.json">
   </head>
-  <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''">
+  <body x-data="deadbolt()" :class="passwordGenerated ? 'password-generated' : ''" x-cloak>
     
     <!-- Google Tag Manager (noscript) -->
-    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-cloak>
+    <div id="input" :class="optionsToggled ? 'options-toggled' : ''" x-init="initialize()">
 
         <div id="input-content">
 
@@ -48,7 +54,7 @@
                             <section id="password-entry">
                                 <label for="memorable-phrase">Memorable Phrase</label>
                                 <div class="phrase-entry">
-                                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="false" @keyup="phraseChanged()" @change="phraseChanged()" autocomplete="false" />
+                                    <input x-model="passPhrase" :type="showPhrase ? 'text' : 'password'" id="memorable-phrase" autocomplete="off" @keyup="phraseChanged()" @change="phraseChanged()" />
                                     <button id="toggle-password-view" @mousedown="showPhrase=true" @mouseup="showPhrase=false" @touchstart="showPhrase=true" @touchend="showPhrase=false" @click.prevent><i class="fa-solid fa-eye"></i></button>
                                 </div>
                                 <button id="generate-button" x-show="passPhrase.length > 5" @click.prevent="generatePassword()">
@@ -113,7 +119,7 @@
                     <div>
                         <h3>How does it work?</h3>
                         <p>On a very simple level, Deadbolt uses the numeric values of the characters used in your memorable phrase and puts those numbers through a series of calculations. The resulting numbers are then turned into your strong password. The calculations are deliberately inaccurate, losing information along the way to ensure they are irreversible, however the same phrase will always generate the same password.</p>
-                        <p>For the more curious of you out there, the full <a href="https://github.com/bittenbytailfly/deadbolt-password-generator" target="_blank">source code is available on GitHub</a></p>
+                        <p>For the more curious of you out there, the full <a href="https://github.com/bittenbytailfly/deadbolt-password-generator" id="source-code-link" target="_blank">source code is available on GitHub</a></p>
                         <h3>What makes Deadbolt different to a password vault?</h3>
                         <p>Unlike 'password vaults', that store all your passwords securely behind a master password, Deadbolt never stores or transmits any personal information whatsoever leaving you fully in control of your data.</p>
                         <p>Since passwords are never stored, they only really exist between the time you generate them, until the time you've used them.</p>
@@ -124,15 +130,15 @@
 
             <footer>
                 <p>&copy; Copyright, Ed Carter 2009-{{ site.time | date: '%Y' }}</p>
-                <p>I love it, and <a href="https://commerce.coinbase.com/checkout/479c5aa4-3c96-428d-8d00-ea7a7c8efda6" target="_blank">I'd like to buy you a coffee</a> to help with future developments!</p>
-                <p>I hate it - <a href="previous-version.htm" rel="nofollow"> take me back to the old version</a>!</p>
+                <p><span class="web-only">I love it, and </span><a href="https://commerce.coinbase.com/checkout/479c5aa4-3c96-428d-8d00-ea7a7c8efda6" id="buy-me-a-coffee-link" target="_blank">I'd like to buy you a coffee</a> to help with future developments!</p>
+                <p class="web-only">I hate it - <a href="previous-version.htm" id="old-version-request-link" rel="nofollow" target="_blank"> take me back to the old version</a>!</p>
             </footer>
 
         </div>
 
     </div>
 
-    <div id="options-toggle-container">
+    <div id="options-toggle-container" :class="{ 'show' : fabButtonReady }">
         <button id="options-toggle" x-on:click.prevent="toggleOptions()" class="options-toggler"><i class="fa-solid fa-gear options-toggler"></i></button>
     </div>
 
@@ -144,7 +150,7 @@
             </div>
         </section>
 
-        <template  x-if="passwordGenerated">
+        <template x-if="passwordGenerated">
 
             <section id="password-container">
                 <div id="full-password">
@@ -188,15 +194,30 @@
 
     </div>
 
-    <div id="legacy-mode-notification-overlay">
+    <div id="legacy-mode-notification-overlay" x-show="showingLegacyModePrompt">
         <div id="legacy-mode-notification">
             <h3>Important!</h3>
             <p>In this new look Deadbolt, the algorithm for generating passwords has been improved.</p>
             <p>
                 If you used Deadbolt to generate passwords using the previous version, you will need to enable <strong>"Legacy mode"</strong> in the settings to ensure that the passwords are the same. 
             </p>
-            <p>Alternatively if you're not quite ready to switch to the new interface, you can still access the <a href="/previous-version.htm">previous version</a>.</p>
-            <button id="acknowledge-legacy-mode-button">Got it!</button>
+            <p>Alternatively if you're not quite ready to switch to the new interface, you can still access the <a href="/previous-version.htm" id="old-version-request-popup-link" rel="nofollow" target="_blank">previous version</a>.</p>
+            <button id="acknowledge-legacy-mode-button" @click.prevent="acknowledgeLegacyMode()">Got it!</button>
+        </div>
+    </div>
+
+    <div id="app-install-notification-overlay" x-show="showingInstallPrompt">
+        <div id="app-install-notification">
+            <h3>Add to Home Screen?</h3>
+            <p>You can add Deadbolt to your home screen, for <strong>faster access</strong> and <strong>offline capabilities</strong>.</p>
+            <p>
+               Would you like to enable this?
+            </p>
+            <div class="install-options">
+                <button id="request-install-button" @click.prevent="appInstallRequested()">Yes Please!</button>
+                <button id="defer-install-button" @click.prevent="appInstallDeferred()">Maybe Later ...</button>
+            </div>
+            <a href="#" id="reject-install-link" @click.prevent="appInstallRejected()">I'll just continue to use the online version</a>
         </div>
     </div>
 
@@ -222,11 +243,67 @@
                 passwordGenerated: false,
                 generatedPassword: '',
                 passwordCopied: false,
+                deferredInstallPrompt : null,
+                showingInstallPrompt: false,
+                hideInstallPrompt: false,
+                showingLegacyModePrompt: false,
+                fabButtonReady: false,
+                initialize() {
+                    // Record initialization event
+                    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+                    window.dataLayer.push({
+                        'event': 'appInitialized',
+                        'displayMode': isStandalone ? 'standalone' : 'browser' 
+                    });
+                    // Capture the install prompt for later use
+                    this.hideInstallPrompt = localStorage.getItem('hideInstallPrompt') === 'true';
+                    window.addEventListener('beforeinstallprompt', (e) => {
+                        e.preventDefault();
+                        this.deferredInstallPrompt = e;
+                    });
+                    // Move password options on resize to handle blur inconsistencies
+                    window.addEventListener('resize', (e) => {
+                        const passwordOptions = document.getElementById('password-options');
+                        const body = document.body;
+                        const inputContent = document.getElementById('input-content');
+                        
+                        if (window.innerWidth <= 991.98) {
+                            // ONLY move the element if it's not already a child of the body
+                            if (passwordOptions.parentNode !== body) {
+                                body.appendChild(passwordOptions);
+                            }
+                            inputContent.style.paddingBottom = '120px';
+                        } else {
+                            const originalContainer = document.getElementById('password-form');
+                            // ONLY move it back if it's not already in the original container
+                            if (passwordOptions.parentNode !== originalContainer) {
+                                originalContainer.appendChild(passwordOptions);
+                            }
+                            inputContent.style.paddingBottom = '0';
+                        }
+                    });
+                    // Install the service worker
+                    window.addEventListener('DOMContentLoaded', () => {
+                        if ('serviceWorker' in navigator) {
+                            window.addEventListener('load', () => {
+                                navigator.serviceWorker.register('/sw.js');
+                            });
+                        }
+                    });
+                    // Show legacy mode prompt on first visit
+                    window.addEventListener('DOMContentLoaded', () => {
+                        if (localStorage.getItem('legacyModeAcknowledged') !== 'true') {
+                            this.showingLegacyModePrompt = true;
+                        }
+                        else {
+                            this.fabButtonReady = true;
+                        }
+                    });
+                },
                 phraseChanged(){
                     this.charsRemaining = (6 - this.passPhrase.length) + ' more character' + (this.passPhrase.length == 5 ? '' : 's');
                 },
                 toggleOptions() {
-                    
                     this.optionsToggled = !this.optionsToggled;
                 },
                 collapseOptions(target) {
@@ -262,18 +339,33 @@
                 generatePassword() {
                     var self = this;
                     this.passwordGenerated = true;
+                    var pinNumber = '' + self.pinOne + self.pinTwo + self.pinThree + self.pinFour;
                     this.generatedPassword = deadboltPasswordGenerator.encodePassword(
                         self.passPhrase,
                         {
                             engineId: self.legacyMode ? 0 : 1,
-                            pin: '' + self.pinOne + self.pinTwo + self.pinThree + self.pinFour,
+                            pin: pinNumber,
                             useSpecial: self.includeSymbols,
                             caseSensitive: self.caseSensitive,
                             passwordLength: self.numberOfCharacters
                         });
+                    window.dataLayer.push({
+                        event: 'passwordGenerated',
+                        args: {
+                            legacyMode: self.legacyMode,
+                            pinUsed: pinNumber != '0000',
+                            specialCharactersUsed: self.includeSymbols,
+                            caseSensitive: self.caseSensitive,
+                            passwordLength: self.numberOfCharacters
+                        }
+                    });
                 },
                 back() {
                     this.passwordGenerated = false;
+                    window.dataLayer.push({
+                        event: 'backButtonPressed'
+                    });
+                    this.promptForAppInstall();
                 },
                 reset() {
                     this.passwordGenerated = false;
@@ -286,6 +378,10 @@
                     this.numberOfCharacters = 15;
                     this.passPhrase = '';
                     this.phraseChanged();
+                    window.dataLayer.push({
+                        event: 'resetButtonPressed'
+                    });
+                    this.promptForAppInstall();
                 },
                 copy() {
                     var copyText = document.getElementById("password-to-copy");
@@ -299,66 +395,53 @@
                     setTimeout(() => {
                         this.passwordCopied = false;
                     }, 3000);
+                    window.dataLayer.push({
+                        event: 'passwordCopiedToClipboard'
+                    });
                 },
                 getPasswordCharacter(i){
-                    console.log(i);
                     return this.generatedPassword.length < i
                         ? ''
                         : this.generatedPassword.substring(i-1, i);
+                },
+                promptForAppInstall() {
+                    if (this.deferredInstallPrompt != null && !this.hideInstallPrompt) {
+                        this.showingInstallPrompt = true;
+                        window.dataLayer.push({
+                            event: 'userPromptedForAppInstall'
+                        });
+                    }
+                },
+                appInstallRequested() {
+                    this.deferredInstallPrompt.prompt();
+                    this.showingInstallPrompt = false;
+                    window.dataLayer.push({
+                        event: 'userInstalledApp'
+                    });
+                },
+                appInstallDeferred() {
+                    this.showingInstallPrompt = false;
+                    this.hideInstallPrompt = true;
+                    window.dataLayer.push({
+                        event: 'userDeferredAppInstall'
+                    });
+                },
+                appInstallRejected() {
+                    localStorage.setItem('hideInstallPrompt', 'true');
+                    this.showingInstallPrompt = false;
+                    this.hideInstallPrompt = true;
+                    window.dataLayer.push({
+                        event: 'userRejectedAppInstall'
+                    });
+                },
+                acknowledgeLegacyMode() {
+                    this.showingLegacyModePrompt = false;
+                    this.fabButtonReady = true;
+                    localStorage.setItem('legacyModeAcknowledged', 'true');
                 }
             }
         }
     </script>    
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const fab = document.getElementById('options-toggle-container');
-            const popupOverlay = document.getElementById('legacy-mode-notification-overlay');
-            const closeButton = document.getElementById('acknowledge-legacy-mode-button');
-
-            if (localStorage.getItem('legacyModeAcknowledged') !== 'true') {
-                popupOverlay.style.display = 'flex';
-            }
-            else {
-                fab.classList.add('show');
-            }
-
-            closeButton.addEventListener('click', function() {
-                popupOverlay.style.display = 'none';
-                fab.classList.add('show');
-                localStorage.setItem('legacyModeAcknowledged', 'true');
-            });
-        });
-    </script>
-
-    <script>
-        function movePasswordOptions() {
-            const passwordOptions = document.getElementById('password-options');
-            const body = document.body;
-            const inputContent = document.getElementById('input-content');
-            
-            if (window.innerWidth <= 991.98) {
-                // ONLY move the element if it's not already a child of the body
-                if (passwordOptions.parentNode !== body) {
-                    body.appendChild(passwordOptions);
-                }
-                inputContent.style.paddingBottom = '120px';
-            } else {
-                const originalContainer = document.getElementById('password-form');
-                // ONLY move it back if it's not already in the original container
-                if (passwordOptions.parentNode !== originalContainer) {
-                    originalContainer.appendChild(passwordOptions);
-                }
-                inputContent.style.paddingBottom = '0';
-            }
-        }
-        
-        // Call the function initially
-        movePasswordOptions();
-        
-        // Call the function on window resize
-        window.addEventListener('resize', movePasswordOptions);
-    </script>
 
   </body>
 </html>
