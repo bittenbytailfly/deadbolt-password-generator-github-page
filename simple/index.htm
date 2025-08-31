@@ -1,0 +1,314 @@
+---
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+    </script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M4457G8Q');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Simple, Memorable Password Generator | Deadbolt</title>
+    <meta name="description" content="Generates easily memorable passwords ideal for one off use, such as password protecting a file in transit">
+    <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+    <link rel="preconnect" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+    <link href="//fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="apple-touch-icon" href="/assets/images/deadbolt-logo-180x180.png">
+  </head>
+  <body>
+    
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M4457G8Q"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header>
+        <h1>
+            <img src="/assets/images/deadbolt.png" alt="Deadbolt Password Generator" />
+        </h1>
+    </header>
+
+    <main>
+
+        <section id="blurb">
+            <h2>Generate a <strong>strong</strong>, <strong>memorable</strong> password</h2>
+            <p>If you need a quick and easy password that's easy to remember or type in from a text message, this tool is for you.</p>
+        </section>
+
+        <section id="simple-password-generator" x-data="deadboltSimple()" x-cloak>
+
+            <div>
+
+                <div x-text="password" id="generated-password"></div>
+
+                <div id="actions">
+                    <button @click.prevent="copyPassword()" :class="passwordCopied ? 'copied' : ''" id="copy-to-clipboard-button">
+                        <i :class="passwordCopied ? 'fa-solid fa-thumbs-up' : 'fa-regular fa-copy'"></i>&nbsp;
+                        <span x-text="passwordCopied ? 'Copied' : 'Copy'"></span>
+                    </button>
+
+                    <button @click.prevent="generatePassword()" id="refresh-button">
+                        <i class="fa-solid fa-rotate-left"></i>&nbsp;
+                        Refresh
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="faqs">
+            <div>
+                <h3>How does it work?</h3>
+                <p>This simple password generator creates a strong password using a pattern of words and numbers in a word.WORD.word!999 format.</p>
+                <h3>Is it secure?</h3>
+                <p>Passwords are generated on your computer, not the server, and they're not logged anywhere so only you see them. Since they use a common pattern, they are more susceptible to brute foce attacks, so these are best reserved for one off uses such as to password protect a zip file or create a password for a new user who will be prompted to change it on first use.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; Copyright, Ed Carter 2009-{{ site.time | date: '%Y' }}</p>
+        <p><span class="web-only">I love it, and </span><a href="https://commerce.coinbase.com/checkout/479c5aa4-3c96-428d-8d00-ea7a7c8efda6" id="buy-me-a-coffee-link" target="_blank">I'd like to buy you a coffee</a> to help with future developments!</p>
+    </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="//kit.fontawesome.com/e79216d307.js" crossorigin="anonymous"></script>
+
+    <script>
+        function deadboltSimple() {
+            return {
+                words: [
+                    "ace", "age", "aid", "air", "aisle", "ant", "ape", "arch", "art", "ash", 
+                    "back", "bait", "band", "bank", "bar", "base", "bath", "bay", "beach",
+                    "beak", "beam", "bean", "bear", "bee", "beef", "belt",
+                    "bench", "bin", "bird", "birth", "bit", "bite", "blade", "blast",
+                    "block", "bloom", "board", "boat", "bolt", "bomb", "bond",
+                    "bone", "book", "boom", "boot", "boss", "bowl", "box", "boy", "brain",
+                    "branch", "brass", "bread", "break", "breath", "breeze", "brick", "bridge",
+                    "brim", "brow", "brush", "bud", "bug", "bulb", "bulk", "bunch", "bus",
+                    "bush", "buzz", "cab", "cage", "cake", "calf", "call", "can", "cane",
+                    "cap", "cape", "car", "card", "care", "case", "cash", "cat", "cause", "cave",
+                    "cell", "cent", "chain", "chair", "chalk", "chance", "change", "charge", "charm",
+                    "chart", "check", "chest", "chief", "child", "chill", "chime", "chin",
+                    "chip", "choice", "chore", "chord", "church", "clam", "clan", "clasp", "class",
+                    "clay", "cliff", "cloak", "clock", "cloth", "cloud", "club", "coach", "coal",
+                    "coast", "coat", "code", "coil", "coin", "cold", "colt", "comb", "cone",
+                    "core", "cork", "corn", "cost", "couch", "cough", "count", "court", "cow", "crab",
+                    "crack", "craft", "crane", "crash", "crate", "crew", "crib", "cross", "crow",
+                    "crowd", "crown", "crumb", "crust", "cub", "cube", "cup", "curb", "cure", "curl",
+                    "curve", "dale", "dam", "dawn", "day", "deal", "dean", "deck",
+                    "deed", "deer", "depth", "desk", "dew", "dice", "dime", "dirt", "dish", "disk",
+                    "dock", "dog", "doom", "door", "dot", "doubt", "dove", "down", "draft", "drag",
+                    "drain", "dream", "dress", "drill", "drink", "drip", "drive", "drone", "drop",
+                    "drug", "drum", "duck", "duct", "duel", "duke", "dune", "dust", "dye", 
+                    "ear", "earth", "east", "edge", "eel", "egg", "elk", "face", "fact", "fade",
+                    "faith", "fall", "fame", "fan", "fang", "farm", "fate", "fault", "fawn", "fear",
+                    "feast", "feat", "fee", "feed", "feel", "fence", "field", "file", "film", "fin",
+                    "find", "fire", "firm", "fish", "fist", "fit", "flag", "flame", "flank", "flap",
+                    "flare", "flash", "flask", "flat", "flaw", "flea", "flesh", "flight", "flock",
+                    "flood", "floor", "floss", "flour", "flow", "flue", "fluid", "flush", "flux",
+                    "fly", "foam", "fog", "foil", "fold", "folk", "food", "fool", "foot", "force",
+                    "forge", "fork", "form", "fort", "foul", "fox", "frame", "fraud", "friend",
+                    "fringe", "frock", "frog", "front", "frost", "froth", "fruit", "fuel", "fund",
+                    "fur", "fuse", "fuzz", "gage", "gale", "game", "gang", "gap", "gas", "gate",
+                    "gem", "gift", "girl", "gland", "glare", "glass", "gleam", "glide", "glimpse",
+                    "globe", "gloom", "glove", "glow", "glue", "goal", "goat", "gold", "goose",
+                    "gorge", "grade", "grain", "grand", "grant", "grape", "graph", "grasp", "grass",
+                    "grave", "grease", "green", "grief", "grill", "grim", "grin", "grip", "grit",
+                    "groan", "ground", "group", "grouse", "grove", "growth", "guard", "guest",
+                    "guide", "gulf", "gull", "gum", "gust", "gut", "hair", "half", "hall", "hand",
+                    "hare", "harm", "harp", "hash", "haste", "hat", "hate", "hawk", "haze", "head",
+                    "health", "heap", "heart", "heat", "hedge", "heel", "height", "heir", "help",
+                    "hen", "herd", "hill", "hint", "hip", "hire", "hiss", "hive", "hoard", "hoax",
+                    "hog", "hold", "hole", "home", "hood", "hook", "hoop", "hope", "horn", "horse",
+                    "hose", "host", "hound", "hour", "house", "hub", "hue", "hug", "hull", "hum",
+                    "hunt", "hut", "ice", "ink", "inn", "isle", "jail", "jam", "jar", "jaw", "jay",
+                    "jazz", "jet", "job", "jog", "joint", "joist", "joke", "joy", "judge", "jug",
+                    "juice", "jump", "junk", "keel", "key", "kid", "king", "kit", "kite",
+                    "knee", "knife", "knight", "knob", "knot", "know", "lace", "lack", "lad",
+                    "lake", "lamb", "lamp", "land", "lane", "lap", "lard", "lark", "latch", "law",
+                    "lawn", "lead", "leaf", "league", "leak", "lease", "leash", "least", "leg",
+                    "length", "lens", "life", "light", "limb", "lime", "line", "link", "lion",
+                    "lip", "list", "load", "loaf", "loan", "lobe", "lock", "lodge", "loft", "log",
+                    "look", "loom", "loop", "loot", "lord", "loss", "love", "luck", "lunch",
+                    "lung", "lure", "mace", "mail", "main", "man", "map", "march", "mare", "mark",
+                    "marsh", "mask", "mass", "mast", "mat", "match", "mate", "maze", "meal",
+                    "means", "meat", "mesh", "mess", "mice", "mile", "milk", "mill", "mime",
+                    "mind", "mine", "mint", "mist", "mite", "mob", "mode", "mole", "month", "mood",
+                    "moon", "moor", "moose", "mop", "moss", "moth", "mound", "mount", "mouse",
+                    "move", "mud", "mug", "mule", "muse", "myth", "nail", "name", "nap",
+                    "neck", "need", "nerve", "nest", "net", "news", "newt", "niche", "night",
+                    "noise", "noon", "norm", "north", "nose", "note", "noun", "nudge", "nurse",
+                    "oaf", "oak", "oar", "oath", "oats", "oil", "ounce", "pace", "pack", "pact",
+                    "pad", "page", "pail", "pain", "paint", "pair", "palm", "pan", "pane", "pants",
+                    "park", "part", "pass", "past", "paste", "path", "pause", "pawn", "pay",
+                    "peace", "peach", "peak", "pear", "pearl", "peg", "pen", "phase", "phone",
+                    "phrase", "piece", "pig", "pike", "pile", "pill", "pin", "pinch", "pine",
+                    "pint", "pipe", "pit", "pitch", "pith", "place", "plaid", "plain", "plan",
+                    "plane", "plank", "plant", "plate", "play", "plea", "plight", "plot", "plow",
+                    "plug", "plum", "plus", "point", "poise", "pool", "pope", "port", "post",
+                    "pot", "pound", "praise", "prawn", "press", "price", "pride", "priest",
+                    "prince", "prize", "probe", "proof", "prose", "pump", "punch", "pup", "purse",
+                    "push", "quack", "quail", "quest", "quill", "quilt", "quince", "quirk",
+                    "quiz", "quote", "race", "rack", "raft", "rage", "raid", "rail", "rain",
+                    "raise", "rake", "ram", "ramp", "range", "rank", "rap", "rash", "rat", "rate",
+                    "raw", "ray", "reach", "realm", "ream", "red", "reed", "reef", "reel",
+                    "reign", "rein", "rent", "rest", "rib", "rice", "ride", "ridge", "rig",
+                    "right", "rim", "rind", "ring", "rink", "rise", "risk", "rite", "road", "roam",
+                    "roar", "robe", "rock", "rod", "rogue", "role", "roll", "roof", "room", "root",
+                    "rope", "rose", "rot", "round", "route", "row", "rub", "rude", "rug", "rule",
+                    "rum", "run", "rung", "runt", "ruse", "rush", "rust", "rut", "sack", "sad",
+                    "safe", "sage", "sail", "saint", "sake", "salt", "sand", "sash", "sauce",
+                    "saw", "scale", "scalp", "scar", "scare", "scarf", "scene", "scent", "school",
+                    "scope", "score", "scorn", "scout", "scrape", "screen", "screw", "script",
+                    "sea", "seal", "seam", "search", "seat", "sect", "seed", "self", "sense",
+                    "serf", "serve", "set", "shade", "shame", "shape", "share", "shark",
+                    "sharp", "shave", "shawl", "sheaf", "sheath", "shed", "sheep", "sheet",
+                    "shelf", "shell", "shield", "shift", "shin", "ship", "shirt", "shock", "shoe",
+                    "shop", "shore", "shot", "shout", "show", "shred", "shrewd", "shriek",
+                    "shrill", "shrub", "shrug", "sick", "side", "sieve", "sigh", "sight", "sign",
+                    "silk", "sin", "sink", "sir", "site", "size", "sketch", "ski", "skill",
+                    "sky", "slab", "slack", "slam", "slang", "slant", "slap",
+                    "slate", "sled", "sleep", "sleet", "sleeve", "slice", "slide",
+                    "slime", "sling", "slip", "slit", "slob", "slope", "slot", "sloth", "slough",
+                    "sludge", "slug", "slum", "slump", "slur", "slush", "smear", "smell", "smile",
+                    "smith", "smock", "smog", "smoke", "snack", "snail", "snake", "snare", "snarl",
+                    "snatch", "sneak", "sneer", "snow", "snub", "soak", "soap", "soil",
+                    "son", "song", "soul", "sound", "soup", "south", "space", "spade", "span",
+                    "spark", "spat", "spawn", "speech", "speed", "spell", "sphere",
+                    "spice", "spike", "spill", "spin", "spine", "spire", "spit", "spite", "splash",
+                    "splice", "splint", "split", "sport", "spot", "spout", "sprain",
+                    "spray", "spring", "spur", "squad", "squash", "squat", "squid", "squint",
+                    "stack", "staff", "stage", "stain", "stair", "stake", "stale",
+                    "stalk", "stall", "stamp", "stand", "star", "starch", "stare", "start",
+                    "state", "stay", "steak", "steal", "steam", "steed", "steel", "steep", "steer",
+                    "stem", "stench", "step", "stew", "stick", "stiff", "sting", "stir", "stock",
+                    "stone", "stool", "stoop", "stop", "store", "stork", "storm", "story",
+                    "stove", "strain", "strand", "strap", "straw", "stray", "stream", "street",
+                    "stress", "stretch", "strike", "string", "strip", "stripe", "stroke",
+                    "stroll", "strife", "stud", "stuff", "stump", "style", "sub", "such", "suit",
+                    "suite", "sum", "sun", "surf", "surge", "swarm", "sway", "sweat", "sweep",
+                    "sweet", "swell", "swing", "swipe", "switch", "swoon", "swoop", "sword",
+                    "tang", "tank", "tap", "tape", "tar", "task", "taste", "tax", "tea", "teach",
+                    "team", "tear", "tent", "term", "test", "text", "than",
+                    "thank", "thaw", "theme", "thief", "thigh", "thing", "thought", "thread",
+                    "threat", "thrill", "throat", "throne", "throng", "thrush", "thud", "thug",
+                    "thumb", "tick", "tide", "tier", "tile", "time", "tin", "tint",
+                    "tip", "tire", "toad", "toast", "toe", "toil", "tomb", "tome", "ton", "tone",
+                    "tong", "tooth", "top", "torch", "tour", "town", "toy",
+                    "trace", "track", "trade", "trail", "train", "trait", "tram", "trap",
+                    "trash", "tray", "treat", "tree", "trek", "trend", "trick", "trim", "trip",
+                    "tripe", "troop", "trot", "trout", "truck", "truce", "true", "trump", "trunk",
+                    "trust", "truth", "tub", "tube", "tug", "tune", "turf", "turn", "tusk",
+                    "twig", "twine", "twist", "type", "urn", "use", "vale", "van", "vase", "vat",
+                    "vault", "veal", "veil", "vein", "vent", "verb", "verge", "verse", "vest",
+                    "vet", "vice", "view", "vile", "vine", "voice", "void", "vole", "vote", "vow",
+                    "wad", "wage", "wail", "waist", "wait", "walk", "wall", "wand", "war", "ward",
+                    "ware", "warm", "warmth", "wash", "wasp", "waste", "watch", "wave",
+                    "wax", "way", "wealth", "web", "wedge", "weed", "week", "weight", "well",
+                    "west", "whale", "wharf", "wheat", "wheel", "whelp", "whim", "whip", "whirl",
+                    "whisk", "white", "whole", "wick", "wide", "width", "wife", "wild", "will",
+                    "win", "winch", "wind", "wine", "wing", "wink", "wire", "wise", "wish", "wit",
+                    "witch", "wolf", "wood", "wool", "word", "work", "world", "worm", "worth",
+                    "wound", "wrath", "wreath", "wreck", "wrench", "wrist", "writ", "yacht",
+                    "yard", "yarn", "yawn", "year", "yell", "yelp", "yolk", "zest",
+                    "zinc", "zip", "zone", "zoo"
+                ],
+                characters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/~`',
+                password: 'Click \'Generate\' to create a password',
+                isGenerating: false,
+                passwordCopied: false,
+            
+                init() {
+                    this.generatePassword();
+                },
+            
+                getRandomNumber(max) {
+                    return Math.floor(Math.random() * max);
+                },
+                getRandomChar() {
+                    return this.characters[this.getRandomNumber(this.characters.length)];
+                },
+                
+                generatePassword() {
+                    let availableWords = [...this.words];
+                    if (availableWords.length < 3) {
+                        this.password = "Not enough words.";
+                        return;
+                    }
+                    
+                    const word1 = availableWords.splice(this.getRandomNumber(availableWords.length), 1)[0];
+                    const word2 = availableWords.splice(this.getRandomNumber(availableWords.length), 1)[0];
+                    const word3 = availableWords[this.getRandomNumber(availableWords.length)];
+                    
+                    const digits = this.getRandomNumber(900) + 100;
+                    const finalPassword = `${word1}.${word2.toUpperCase()}.${word3}!${digits}`;
+                    
+                    this.isGenerating = true;
+                    this.animatePassword(finalPassword);
+                    window.dataLayer.push({
+                        event: 'simplePasswordGenerated'
+                    });
+                },
+                
+                animatePassword(finalPassword) {
+                    const duration = 500;
+                    const startTime = Date.now();
+                    const passwordLength = finalPassword.length;
+                    
+                    const tick = () => {
+                        const elapsedTime = Date.now() - startTime;
+                        if (elapsedTime < duration) {
+                            let scrambledPassword = '';
+                            for (let i = 0; i < passwordLength; i++) {
+                                scrambledPassword += this.getRandomChar();
+                            }
+                            this.password = scrambledPassword;
+                            requestAnimationFrame(tick);
+                        } else {
+                            this.password = finalPassword;
+                            this.isGenerating = false;
+                        }
+                    };
+                    requestAnimationFrame(tick);
+                },
+                
+                copyPassword() {
+                    if (this.password.includes('Click') || this.password.includes('words')) {
+                        return;
+                    }
+                    
+                    const tempTextArea = document.createElement('textarea');
+                    tempTextArea.value = this.password;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempTextArea);
+                    
+                    this.passwordCopied = true;
+
+                    window.dataLayer.push({
+                        event: 'simplePasswordCopied'
+                    });
+
+                    setTimeout(() => {
+                        this.passwordCopied = false;
+                    }, 3000);
+                }
+            }
+        }
+    </script>
+
+  </body>
+</html>

@@ -30,6 +30,7 @@ $optionsTransitionTime: 0.25s;
 @import "footer";
 @import "legacy-mode-popup";
 @import "app-install-popup";
+@import "simple.scss";
 
 [x-cloak] {
     display: none !important;
@@ -78,10 +79,6 @@ header, main, footer {
   display: flex;
   flex-direction: column;
 }
-
-main {
-  flex: 1;
-} div
 
 header, #blurb, #password-generator-container, #faqs div, footer {
     @extend .container;

@@ -1,0 +1,21 @@
+#simple-password-generator {
+
+    background: #eee;
+    padding: $grid-gutter-width;
+
+    div:first-child {
+        @extend .container;
+        
+    }
+    
+    #generated-password {
+        text-align: center;
+        font-size: clamp(1rem, 5vw, 5rem);
+        font-weight: 600;
+        margin-bottom: $grid-gutter-width/2;
+    }
+
+    #actions {
+        text-align: center;
+    }
+}
